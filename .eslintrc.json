@@ -1,0 +1,16 @@
+{
+    "extends": ["airbnb"],
+    "rules": {
+    	"linebreak-style": ["error", "windows"],
+    	"arrow-parens": [2, "as-needed"],
+    	"eqeqeq": 0,
+        "indent": [2, "tab"],
+        "no-tabs": 0,
+        "no-underscore-dangle": 0,
+        "max-len": ["error", { "code": 140 }]
+    },
+    "env": { 
+	 		"browser": true,
+	 		"es6": true
+	 }
+}
