@@ -4,6 +4,7 @@ import http from 'http';
 import path from 'path';
 import Player from './player';
 import Game from './game';
+import uuid from 'node-uuid';
 
 const app = express();
 const httpServer = http.Server(app);
@@ -29,18 +30,25 @@ class Server {
 
 	addSocketHandlers() {
 		this.io.sockets.on('connection', socket => {
-			// listen for disconnection; 
-			socket.on('disconnect', () => this.onDisconnect(socket.id)); 
-			// listen for new player
+			socket.on('disconnect', () => this.onDisconnect(socket)); 
 			socket.on("newPlayer", () => this.onNewPlayer(socket.id));
-			// listen for player input
 			socket.on("playerInput", data => this.onPlayerInput(socket, data));
 		});
 	}
 
-	onDisconnect(id) {
-		console.log("Player left: " + id);
-		this.waitingPlayers.filter(p => p.id != id);
+	onDisconnect(socket) {
+		console.log("Player left: " + socket.id);
+
+		this.games.forEach(game => {
+			game.players.forEach(player => {
+				if (player.id == socket.id) {
+					this.io.to(game.id).emit('opponentLeft');
+					this.removePlayersFromGameRoom(game);
+					console.log("Game " + game.id + " over, player: " + player.id + " left");
+				}
+			});
+		});
+		this.waitingPlayers.filter(p => p.id != socket.id);
 	}
 
 	onNewPlayer(id) {
@@ -48,28 +56,55 @@ class Server {
 		this.waitingPlayers.push(new Player(id));
 
 		if (this.waitingPlayers.length >= 2) {
-			const player1 = this.waitingPlayers.shift();
-			const player2 = this.waitingPlayers.shift();
-			const game = new Game(new Date().getTime(), player1, player2);
-
-			this.games.push(game);
-
-			this.io.sockets.connected[player1.id].join(game.id);
-			this.io.sockets.connected[player2.id].join(game.id);
-			this.io.to(game.id).emit('updateGame', game);
+			this.createGame();
 		}
 	}
 
-	findGame(id) {
-		return this.games.find(g => g.id == id);
+	createGame() {
+		const player1 = this.waitingPlayers.shift();
+		const player2 = this.waitingPlayers.shift();
+		const game = new Game(uuid.v4(), player1, player2);
+
+		if (this.io.sockets.connected[player1.id] && this.io.sockets.connected[player2.id]) {
+			this.addPlayerToGameRoom(player1.id, game.id);
+			this.addPlayerToGameRoom(player2.id, game.id);
+			this.games.push(game);
+			this.io.to(game.id).emit('startGame', game);
+		}
+	}
+
+	findGame(id, playerId) {
+		return this.games.find(game => game.id == id && game.players.some(player => player.id == playerId));
 	}
 
 	onPlayerInput(socket, data) {
-		const gameId = Object.keys(socket.rooms).filter(r => r != socket.id);
-		const game = this.findGame(gameId);
+		const gameId = data.gameId;
+		const game = this.findGame(gameId, socket.id);
 
-		game.validateTurn(socket.id, data);
-		this.io.to(gameId).emit('updateGame', game);
+		if (!game) {
+			return;
+		}
+
+		game.validateTurn(socket.id, data.coordinates);
+
+		if (game.winner) {
+			this.io.to(game.id).emit('gameOver', game);
+			this.removePlayersFromGameRoom(game);
+		} else {
+			this.io.to(gameId).emit('updateGame', game);
+		}
+	}
+
+	addPlayerToGameRoom(playerId, gameId) {
+		this.io.sockets.connected[playerId].join(gameId);
+	}
+
+	removePlayersFromGameRoom(game) {
+		game.players.forEach(player => {
+			if (this.io.sockets.connected[player.id]) {
+				this.io.sockets.connected[player.id].leave(game.id);
+			}
+		});
 	}
 }
 

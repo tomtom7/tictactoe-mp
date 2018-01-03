@@ -1,13 +1,23 @@
 import { getCursorPosition } from './general';
+import { canvas } from './constants';
 
 class MoveHandler {
 	constructor(socket) {
 		this.socket = socket;
-		document.getElementById('game-canvas').onclick = e => this.sendCoordinates(getCursorPosition(e));
+		canvas.onclick = e => this.sendCoordinates(getCursorPosition(e));
 	}
 
 	sendCoordinates(coordinates) {
-		this.socket.emit("playerInput", coordinates);
+		if (!this.gameId) {
+			return;
+		}
+
+		const data = {
+			coordinates: coordinates,
+			gameId: this.gameId
+		};
+
+		this.socket.emit("playerInput", data);
 	}
 }
 

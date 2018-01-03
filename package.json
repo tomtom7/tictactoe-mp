@@ -13,6 +13,7 @@
     "babel-core": "^6.26.0",
     "babel-preset-env": "^1.6.1",
     "express": "^4.16.2",
+    "node-uuid": "^1.4.8",
     "socket.io": "^2.0.4"
   },
   "devDependencies": {
