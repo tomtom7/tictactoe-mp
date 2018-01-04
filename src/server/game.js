@@ -106,7 +106,7 @@ class Game {
 	checkWinner(i, type, x, y) {
 		if (i == 2) {
 			this.setWinner(x, y, type);
-			console.log(`Game ${this.id} over, winner: ${this.result.winner.id}`);
+			console.log(`Game ${this.id} over, winner: ${this.result.winner}`);
 		}
 	}
 }
