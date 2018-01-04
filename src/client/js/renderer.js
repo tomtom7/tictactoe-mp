@@ -11,22 +11,22 @@ class Renderer {
 	}
 
 	drawGrid() {
-    ctx.beginPath();
-    ctx.lineWidth = 0.15;
-    ctx.strokeStyle = '#000000';
-    for (let x = 0; x <= canvas.width; x += tileScale) {
-      ctx.moveTo(x, 0);
-      ctx.lineTo(x, canvas.height);
-    }
+		ctx.beginPath();
+		ctx.lineWidth = 0.15;
+		ctx.strokeStyle = '#000000';
+		for (let x = 0; x <= canvas.width; x += tileScale) {
+			ctx.moveTo(x, 0);
+			ctx.lineTo(x, canvas.height);
+		}
 
-    ctx.stroke(); 
+		ctx.stroke();
 
-    ctx.beginPath();
-    for (let y = 0; y <= canvas.height; y += tileScale) {
-      ctx.moveTo(0, y);
-      ctx.lineTo(canvas.width, y);
-    }
-    ctx.stroke(); 
+		ctx.beginPath();
+		for (let y = 0; y <= canvas.height; y += tileScale) {
+			ctx.moveTo(0, y);
+			ctx.lineTo(canvas.width, y);
+		}
+		ctx.stroke();
 	}
 
 	drawEntitiy(shape, x, y) {
@@ -37,24 +37,24 @@ class Renderer {
 		} else {
 			this.drawO(x * tileScale, y * tileScale);
 		}
-    ctx.stroke();
+		ctx.stroke();
 	}
 
 	drawMoves(grid) {
 		for (let x = 0; x < grid.length; x += 1) {
 			for (let y = 0; y < grid[x].length; y += 1) {
 				if (grid[x][y]) {
-				  this.drawEntitiy(grid[x][y].shape, x, y);
+					this.drawEntitiy(grid[x][y].shape, x, y);
 				}
-	    }
-    }
+			}
+		}
 	}
 
 	drawX(x, y) {
 		ctx.moveTo(x + offset - radius, y + offset - radius);
-    ctx.lineTo(x + offset + radius, y + offset + radius);
-    ctx.moveTo(x + offset + radius, y + offset - radius);
-    ctx.lineTo(x + offset - radius, y + offset + radius);
+		ctx.lineTo(x + offset + radius, y + offset + radius);
+		ctx.moveTo(x + offset + radius, y + offset - radius);
+		ctx.lineTo(x + offset - radius, y + offset + radius);
 	}
 
 	drawO(x, y) {
@@ -64,16 +64,16 @@ class Renderer {
 	drawVictoryLine(line) {
 		ctx.beginPath();
 		ctx.lineWidth = 5;
-		if (line.orientation == 'COL') {
+		if (line.type == 'COL') {
 			this.drawCol(line.x * tileScale);
 		}
-		if (line.orientation == 'ROW') {
+		if (line.type == 'ROW') {
 			this.drawRow(line.y * tileScale);
 		}
-		if (line.orientation == 'DIAG') {
+		if (line.type == 'DIAG') {
 			this.drawDiagonal();
 		}
-		if (line.orientation == 'ADIAG') {
+		if (line.type == 'ADIAG') {
 			this.drawAntiDiagonal();
 		}
 
@@ -108,7 +108,6 @@ class Renderer {
 		if (game.result && game.result.state == WINNER) {
 			this.drawVictoryLine(game.result.line);
 		}
-
 	}
 }
 

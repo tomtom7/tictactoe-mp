@@ -13,14 +13,12 @@ class MoveHandler {
 		}
 
 		const data = {
-			coordinates: coordinates,
-			gameId: this.gameId
+			coordinates,
+			gameId: this.gameId,
 		};
 
-		this.socket.emit("playerInput", data);
+		this.socket.emit('playerInput', data);
 	}
 }
 
 export default MoveHandler;
-
-

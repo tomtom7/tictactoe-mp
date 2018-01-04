@@ -1,7 +1,8 @@
 import io from 'socket.io-client';
 import MoveHandler from './movehandler';
 import Renderer from './renderer';
-import { gameState, playBtn, stateTexts, WINNER } from './constants';
+import { playBtn, stateTexts, WINNER } from './constants';
+import { setGameState, hidePlay, showPlay } from './general';
 
 class Client {
 	constructor() {
@@ -9,7 +10,7 @@ class Client {
 		this.moveHandler = new MoveHandler(this.socket);
 		this.renderer = new Renderer();
 		this.addSocketListeners();
-		playBtn.onclick = e => this.play();
+		playBtn.onclick = () => this.play();
 	}
 
 	addSocketListeners() {
@@ -19,7 +20,7 @@ class Client {
 	}
 
 	onGameUpdate(game) {
-		this.setState(this.getPlayerText(game.currentPlayer.id, stateTexts.YOUR_TURN, stateTexts.OPPONENT_TURN));
+		setGameState(this.getPlayerText(game.currentPlayer.id, stateTexts.YOUR_TURN, stateTexts.OPPONENT_TURN));
 		this.renderer.render(game);
 	}
 
@@ -31,16 +32,16 @@ class Client {
 	onGameOver(game) {
 		this.setGame(null);
 		this.setEndState(game);
-		this.showPlay();
+		showPlay();
 		this.renderer.render(game);
 	}
 
 	setEndState(game) {
 		if (game.result.state == WINNER) {
-			return this.setState(this.getPlayerText(game.result.winner, stateTexts.WIN, stateTexts.LOSS));
+			return setGameState(this.getPlayerText(game.result.winner, stateTexts.WIN, stateTexts.LOSS));
 		}
 
-		return this.setState(stateTexts[game.result.state]);
+		return setGameState(stateTexts[game.result.state]);
 	}
 
 	getPlayerText(id, samePlayerText, otherPlayerText) {
@@ -56,22 +57,10 @@ class Client {
 			return;
 		}
 
-		this.socket.emit("newPlayer");
-		this.hidePlay();
-		this.setState(stateTexts.WAITING);
+		this.socket.emit('newPlayer');
+		hidePlay();
+		setGameState(stateTexts.WAITING);
 		this.renderer.clearCanvas();
-	}
-
-	setState(text) {
-		gameState.innerHTML = text;
-	}
-
-	hidePlay() {
-		playBtn.style.display = "none";
-	}
-
-	showPlay() {
-		playBtn.style.display = "block";
 	}
 
 	setGame(gameId) {

@@ -10,7 +10,7 @@
         "max-len": ["error", { "code": 140 }]
     },
     "env": { 
-	 		"browser": true,
-	 		"es6": true
+		"browser": true,
+		"es6": true
 	 }
 }

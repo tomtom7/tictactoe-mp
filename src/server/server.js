@@ -11,13 +11,13 @@ const httpServer = http.Server(app);
 const port = 3000;
 
 app.get('/', (req, res) => {
-  res.sendFile(path.resolve('dist/index.html'));
+	res.sendFile(path.resolve('dist/index.html'));
 });
 
 app.use('/dist', express.static(path.resolve('dist')));
 
 httpServer.listen(port, () => {
-  console.log('listening on *:3000');
+	console.log('listening on *:3000');
 });
 
 class Server {
@@ -30,21 +30,21 @@ class Server {
 
 	addSocketHandlers() {
 		this.io.sockets.on('connection', socket => {
-			socket.on('disconnect', () => this.onDisconnect(socket)); 
-			socket.on("newPlayer", () => this.onNewPlayer(socket.id));
-			socket.on("playerInput", data => this.onPlayerInput(socket, data));
+			socket.on('disconnect', () => this.onDisconnect(socket));
+			socket.on('newPlayer', () => this.onNewPlayer(socket.id));
+			socket.on('playerInput', data => this.onPlayerInput(socket, data));
 		});
 	}
 
 	onDisconnect(socket) {
-		console.log("Player left: " + socket.id);
+		console.log(`Player left: ${socket.id}`);
 
 		this.games.forEach(game => {
 			game.players.forEach(player => {
 				if (player.id == socket.id) {
 					game.onOpponentLeft();
 					this.endGame(game);
-					console.log("Game " + game.id + " over, player: " + player.id + " left");
+					console.log(`Game ${game.id} over, player: ${player.id} left`);
 				}
 			});
 		});
@@ -52,7 +52,7 @@ class Server {
 	}
 
 	onNewPlayer(id) {
-		console.log("New player: " + id);
+		console.log(`New player: ${id}`);
 		this.waitingPlayers.push(new Player(id));
 
 		if (this.waitingPlayers.length >= 2) {
@@ -63,6 +63,7 @@ class Server {
 	createGame() {
 		const player1 = this.waitingPlayers.shift();
 		const player2 = this.waitingPlayers.shift();
+
 		const game = new Game(uuid.v4(), player1, player2);
 
 		if (this.io.sockets.connected[player1.id] && this.io.sockets.connected[player2.id]) {
@@ -75,8 +76,7 @@ class Server {
 	}
 
 	onPlayerInput(socket, data) {
-		const gameId = data.gameId;
-		const game = this.findGame(gameId, socket.id);
+		const game = this.findGame(data.gameId, socket.id);
 
 		if (!game) {
 			return;
@@ -85,10 +85,10 @@ class Server {
 		game.validateTurn(socket.id, data.coordinates);
 
 		if (game.result) {
-			return this.endGame(game);
-		} 
-
-		this.updateGame(game);
+			this.endGame(game);
+		} else {
+			this.updateGame(game);
+		}
 	}
 
 

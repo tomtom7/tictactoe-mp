@@ -1,7 +1,5 @@
-import { getRandomIndex, getCellIndex } from './general';
-import { tileScale, shapes, lines, } from './constants';
-
-import { gameOverCodes } from './constants';
+import { getRandomIndex, getCellIndex, getCoordinates } from './general';
+import { tileScale, shapes, lines, gameOverCodes } from './constants';
 
 class Game {
 	constructor(id, player1, player2) {
@@ -12,7 +10,7 @@ class Game {
 		this.players = [player1, player2];
 		this.grid = [[], [], []];
 		this.currentPlayer = this.chooseRandomPlayer();
-		console.log("Game " + this.id + " started");
+		console.log(`Game ${this.id} started`);
 	}
 
 	chooseRandomPlayer() {
@@ -20,7 +18,7 @@ class Game {
 	}
 
 	nextTurn() {
-		this.currentPlayer = this.players.filter(p => p.id != this.currentPlayer.id)[0];
+		[this.currentPlayer] = this.players.filter(p => p.id != this.currentPlayer.id);
 	}
 
 	validateTurn(id, data) {
@@ -72,37 +70,21 @@ class Game {
 			return;
 		}
 
-		for(let i = 0; i < 3; i += 1) {
-			const coordinates = this.getCoordinates(type, x, y, i);
+		for (let i = 0; i < 3; i += 1) {
+			const coordinates = getCoordinates(type, x, y, i);
 			const cellX = coordinates[0];
 			const cellY = coordinates[1];
 
 			if (!this.isValidCell(cellX, cellY)) {
 				break;
-			} 
+			}
 
 			this.checkWinner(i, type, cellX, cellY);
 		}
 	}
 
-	getCoordinates(type, x, y, i) {
-		if (type == lines.COL) {
-			y = i;
-		} else if (type == lines.ROW) {
-			x = i;
-		}	else if (type == lines.DIAG) {
-			x = i;
-			y = i;
-		}	else if (type == lines.ADIAG) {
-			x = i;
-			y = 2 - i;
-		}
-
-		return [x, y];
-	}
-
 	isValidCell(x, y) {
-		return this.grid[x] && this.grid[x][y] && this.grid[x][y].id == this.currentPlayer.id
+		return this.grid[x] && this.grid[x][y] && this.grid[x][y].id == this.currentPlayer.id;
 	}
 
 	onOpponentLeft() {
@@ -110,27 +92,21 @@ class Game {
 	}
 
 	setResult(state) {
-		this.result = {
-			state: state
-		}
+		this.result = { state };
 	}
 
 	setWinner(x, y, type) {
 		this.result = {
 			state: gameOverCodes.WINNER,
 			winner: this.currentPlayer.id,
-			line: { 
-				orientation: type,
-				x: x,
-				y: y
-			}
-		}
+			line: { type, x, y },
+		};
 	}
 
 	checkWinner(i, type, x, y) {
 		if (i == 2) {
 			this.setWinner(x, y, type);
-			console.log("Game " + this.id + " over, winner: " + this.result.winner.id);
+			console.log(`Game ${this.id} over, winner: ${this.result.winner.id}`);
 		}
 	}
 }
