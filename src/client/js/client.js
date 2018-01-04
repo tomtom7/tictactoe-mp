@@ -17,6 +17,7 @@ class Client {
 		this.socket.on('startGame', game => this.onGameStart(game));
 		this.socket.on('updateGame', game => this.onGameUpdate(game));
 		this.socket.on('gameOver', game => this.onGameOver(game));
+		this.socket.on('disconnect', () => this.handleDisconnect());
 	}
 
 	onGameUpdate(game) {
@@ -36,6 +37,12 @@ class Client {
 		this.renderer.render(game);
 	}
 
+	handleDisconnect() {
+		this.setGame(null);
+		setGameState(stateTexts.DISCONNECTED);
+		showPlay();
+	}
+
 	setEndState(game) {
 		if (game.result.state == WINNER) {
 			return setGameState(this.getPlayerText(game.result.winner, stateTexts.WIN, stateTexts.LOSS));
@@ -53,7 +60,7 @@ class Client {
 	}
 
 	play() {
-		if (this.moveHandler.gameId) {
+		if (!this.socket.connected || this.moveHandler.gameId ) {
 			return;
 		}
 

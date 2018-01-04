@@ -15,4 +15,5 @@ export const stateTexts = {
 	WAITING: 'Waiting for players',
 	YOUR_TURN: 'It is your turn',
 	OPPONENT_TURN: 'Waiting for other player',
+	DISCONNECTED: 'You have been disconneted',
 };
