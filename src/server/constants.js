@@ -9,3 +9,9 @@ export const lines = {
 	DIAG: 'DIAG',
 	ADIAG: 'ADIAG'
 };
+
+export const gameOverCodes = {
+	TIE: 'TIE',
+	WINNER: "WINNER",
+	OPPONENT_LEFT: 'OPPONENT_LEFT'
+}

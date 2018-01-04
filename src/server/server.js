@@ -2,9 +2,9 @@ import express from 'express';
 import socketIO from 'socket.io';
 import http from 'http';
 import path from 'path';
+import uuid from 'node-uuid';
 import Player from './player';
 import Game from './game';
-import uuid from 'node-uuid';
 
 const app = express();
 const httpServer = http.Server(app);
@@ -42,8 +42,8 @@ class Server {
 		this.games.forEach(game => {
 			game.players.forEach(player => {
 				if (player.id == socket.id) {
-					this.io.to(game.id).emit('opponentLeft');
-					this.removePlayersFromGameRoom(game);
+					game.onOpponentLeft();
+					this.endGame(game);
 					console.log("Game " + game.id + " over, player: " + player.id + " left");
 				}
 			});
@@ -66,10 +66,7 @@ class Server {
 		const game = new Game(uuid.v4(), player1, player2);
 
 		if (this.io.sockets.connected[player1.id] && this.io.sockets.connected[player2.id]) {
-			this.addPlayerToGameRoom(player1.id, game.id);
-			this.addPlayerToGameRoom(player2.id, game.id);
-			this.games.push(game);
-			this.io.to(game.id).emit('startGame', game);
+			this.startGame(game);
 		}
 	}
 
@@ -87,13 +84,13 @@ class Server {
 
 		game.validateTurn(socket.id, data.coordinates);
 
-		if (game.winner) {
-			this.io.to(game.id).emit('gameOver', game);
-			this.removePlayersFromGameRoom(game);
-		} else {
-			this.io.to(gameId).emit('updateGame', game);
-		}
+		if (game.result) {
+			return this.endGame(game);
+		} 
+
+		this.updateGame(game);
 	}
+
 
 	addPlayerToGameRoom(playerId, gameId) {
 		this.io.sockets.connected[playerId].join(gameId);
@@ -105,6 +102,21 @@ class Server {
 				this.io.sockets.connected[player.id].leave(game.id);
 			}
 		});
+	}
+
+	endGame(game) {
+		this.io.to(game.id).emit('gameOver', game);
+		this.removePlayersFromGameRoom(game);
+	}
+
+	updateGame(game) {
+		this.io.to(game.id).emit('updateGame', game);
+	}
+
+	startGame(game) {
+		game.players.forEach(player => this.addPlayerToGameRoom(player.id, game.id));
+		this.games.push(game);
+		this.io.to(game.id).emit('startGame', game);
 	}
 }
 

@@ -1,4 +1,4 @@
-import { canvas, ctx, tileScale, offset, padding, radius } from './constants';
+import { canvas, ctx, tileScale, offset, padding, radius, WINNER } from './constants';
 
 class Renderer {
 	constructor(resources, spritesData) {
@@ -105,8 +105,8 @@ class Renderer {
 		this.drawGrid();
 		this.drawMoves(game.grid);
 
-		if (game.winner && game.winner != 'NONE') {
-			this.drawVictoryLine(game.winner.line);
+		if (game.result && game.result.state == WINNER) {
+			this.drawVictoryLine(game.result.line);
 		}
 
 	}
