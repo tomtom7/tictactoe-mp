@@ -12,11 +12,22 @@
   "dependencies": {
     "babel-core": "^6.26.0",
     "babel-preset-env": "^1.6.1",
+    "babel-preset-stage-2": "^6.24.1",
+    "css-loader": "^0.28.8",
     "express": "^4.16.2",
     "node-uuid": "^1.4.8",
-    "socket.io": "^2.0.4"
+    "parcel-bundler": "^1.4.1",
+    "parcel-plugin-vue": "^1.5.0",
+    "socket.io": "^2.0.4",
+    "vue": "^2.5.13",
+    "vue-socket.io": "^2.1.1-a",
+    "vue-template-compiler": "^2.5.13",
+    "vuex": "^3.0.1"
   },
   "devDependencies": {
     "babel-watch": "^2.0.7"
+  },
+  "browser": {
+    "vue": "vue/dist/vue.common.js"
   }
 }

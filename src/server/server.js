@@ -31,8 +31,9 @@ class Server {
 	addSocketHandlers() {
 		this.io.sockets.on('connection', socket => {
 			socket.on('disconnect', () => this.onDisconnect(socket));
-			socket.on('newPlayer', () => this.onNewPlayer(socket.id));
+			socket.on('playerJoin', () => this.onPlayerJoin(socket.id));
 			socket.on('playerInput', data => this.onPlayerInput(socket, data));
+			socket.on('playerLeave', () => this.onPlayerLeave(socket));
 		});
 	}
 
@@ -48,16 +49,20 @@ class Server {
 				}
 			});
 		});
-		this.waitingPlayers.filter(p => p.id != socket.id);
+		this.waitingPlayers.filter(p => p.id !== socket.id);
 	}
 
-	onNewPlayer(id) {
+	onPlayerJoin(id) {
 		console.log(`New player: ${id}`);
 		this.waitingPlayers.push(new Player(id));
 
 		if (this.waitingPlayers.length >= 2) {
 			this.createGame();
 		}
+	}
+
+	onPlayerLeave(socket) {
+		this.waitingPlayers = this.waitingPlayers.filter(p => p.id != socket.id);
 	}
 
 	createGame() {
@@ -72,7 +77,7 @@ class Server {
 	}
 
 	findGame(id, playerId) {
-		return this.games.find(game => game.id == id && game.players.some(player => player.id == playerId));
+		return this.games.find(game => game.id === id && game.players.some(player => player.id === playerId));
 	}
 
 	onPlayerInput(socket, data) {
