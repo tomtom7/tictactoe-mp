@@ -1,7 +1,7 @@
 <template>
 	<div class="center">
-		<p id="game-state">{{ gameState }}</p>
-		<button type="button" id="play" class="center" v-if="notStarted" @click="onClick">{{ btnText }}</button>
+		<p id="game-state">{{ $t(gameState) }}</p>
+		<button type="button" id="play" class="center" v-if="!isRunning" @click="playerAction">{{ $t(btnText) }}</button>
 	</div>
 </template>
 
@@ -9,14 +9,14 @@
     import { mapGetters, mapActions } from 'vuex';
 	export default {
 		name: 'game-state',
-		computed: mapGetters({
-            notStarted: 'notStarted',
-            btnText: 'btnText',
-            gameState: 'gameState'
-		}),
-        methods: mapActions({
-			onClick: 'playerAction'
-		})
+		computed: mapGetters([
+			'isRunning',
+            'btnText',
+            'gameState'
+        ]),
+        methods: mapActions([
+        	'playerAction'
+        ])
     }
 </script>
 

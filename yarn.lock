@@ -4298,6 +4298,10 @@ vueify@^9.4.1:
     vue-template-compiler "^2.0.0-alpha.8"
     vue-template-es2015-compiler "^1.2.2"
 
+vuex-i18n@^1.9.0:
+  version "1.9.0"
+  resolved "https://registry.yarnpkg.com/vuex-i18n/-/vuex-i18n-1.9.0.tgz#2228da30a209abdbb42a3309b1fdc22347bb5da9"
+
 vuex@^3.0.1:
   version "3.0.1"
   resolved "https://registry.yarnpkg.com/vuex/-/vuex-3.0.1.tgz#e761352ebe0af537d4bb755a9b9dc4be3df7efd2"

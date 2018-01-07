@@ -11,13 +11,22 @@
 			return {
 				w: '300',
 				h: '300',
-                renderer: {}
+                renderer: {},
+                tileScale: 100
             }
 		},
 		mounted() {
-			this.renderer = new Renderer(this.$el, 100);
+			this.renderer = new Renderer(this.$el, this.tileScale);
         },
+		computed: {
+			game() {
+				return this.$store.getters.game;
+			}
+		},
 		methods: {
+			...mapActions({
+				playerInput: 'playerInput'
+			}),
 			onClick(e) {
 				this.playerInput(this.getCursorPosition(e));
 			},
@@ -26,17 +35,14 @@
 				const x = e.clientX - rect.left;
 				const y = e.clientY - rect.top;
 				return { x, y };
-			},
-			...mapActions({
-				playerInput: 'playerInput'
-			})
+			}
 		},
 		watch: {
-			'$store.state.game': function(game)  {
-				if (game) {
-					this.renderer.render(game);
+			game() {
+				if (this.game) {
+					this.renderer.render(this.game);
 				}
-			}
+            }
 		}
 	}
 </script>

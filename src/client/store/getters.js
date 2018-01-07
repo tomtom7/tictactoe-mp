@@ -1,14 +1,17 @@
 export default {
-	notStarted(state) {
-		return !state.gameId;
+	isRunning(state) {
+		return state.game.id;
 	},
 	btnText(state) {
-		if (state.queued) {
-			return state.cancelText;
+		if (state.gameState === 'QUEUED') {
+			return 'cancelText'
 		}
-		return state.playText;
+		return 'playText'
 	},
 	gameState(state) {
-		return state[state.gameState];
+		return state.gameState;
+	},
+	game(state) {
+		return state.game;
 	}
 }
