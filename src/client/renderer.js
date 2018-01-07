@@ -107,7 +107,7 @@ export default class Renderer {
 		this.drawGrid();
 		this.drawMoves(game.grid);
 
-		if (game.result && game.result.state === "WINNER") {
+		if (game.result && game.result.state === 'WINNER') {
 			this.drawVictoryLine(game.result.line);
 		}
 	}

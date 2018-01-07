@@ -1,26 +1,23 @@
 export default {
-	socket_startGame({commit}, game) {
-		commit('updateGame', game);
-		commit('setConditionalGameState', {
-			id: game.currentPlayer.id,
-			samePlayerState: 'TURN',
-			otherPlayerState: 'WAIT'
-		});
-	},
-	socket_gameOver({commit}, game) {
+	socket_gameOver({commit, dispatch}, game) {
 		commit('updateGame', game);
 		commit('gameOver');
 		if (game.result.winner) {
-			return commit('setConditionalGameState', {
-				id: game.currentPlayer.id,
+			return dispatch('setConditionalGameState', {
+				id: game.result.winner,
 				samePlayerState: 'WIN',
 				otherPlayerState: 'LOSS'
 			});
 		}
 		commit('setGameState', game.result.state);
 	},
-	socket_updateGame({commit}, game) {
+	socket_updateGame({commit, dispatch}, game) {
 		commit('updateGame', game);
+		dispatch('setConditionalGameState', {
+			id: game.currentPlayer.id,
+			samePlayerState: 'TURN',
+			otherPlayerState: 'WAIT'
+		});
 	},
 	socket_disconnect({commit}) {
 		commit('setGameState', 'DISCONNECT');

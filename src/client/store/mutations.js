@@ -13,13 +13,6 @@ export default {
 	gameOver(state) {
 		state.game.id = null;
 	},
-	setConditionalGameState(state, payload) {
-		if (payload.id === state.socketId) {
-			state.gameState = payload.samePlayerState;
-		} else {
-			state.gameState = payload.otherPlayerState;
-		}
-	},
 	setGameState(state, value) {
 		state.gameState = value;
 	}

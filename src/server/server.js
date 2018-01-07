@@ -121,7 +121,7 @@ class Server {
 	startGame(game) {
 		game.players.forEach(player => this.addPlayerToGameRoom(player.id, game.id));
 		this.games.push(game);
-		this.io.to(game.id).emit('startGame', game);
+		this.updateGame(game);
 	}
 }
 
