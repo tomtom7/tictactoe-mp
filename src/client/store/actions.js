@@ -13,9 +13,9 @@ export default {
 	},
 	setConditionalGameState(context, payload) {
 		if (payload.id === context.state.socketId) {
-			return context.commit('setGameState', payload.samePlayerState);
+			return context.commit('gameState', payload.samePlayerState);
 		}
-		return context.commit('setGameState', payload.otherPlayerState);
+		return context.commit('gameState', payload.otherPlayerState);
 	},
 	...listeners,
 	...emitters

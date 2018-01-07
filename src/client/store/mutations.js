@@ -13,7 +13,7 @@ export default {
 	gameOver(state) {
 		state.game.id = null;
 	},
-	setGameState(state, value) {
+	gameState(state, value) {
 		state.gameState = value;
 	}
 }

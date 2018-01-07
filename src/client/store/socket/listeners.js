@@ -20,7 +20,7 @@ export default {
 		});
 	},
 	socket_disconnect({commit}) {
-		commit('setGameState', 'DISCONNECT');
+		commit('gameState', 'DISCONNECT');
 		commit('disconnect');
 		commit('gameOver');
 	}

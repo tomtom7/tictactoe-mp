@@ -42,7 +42,7 @@ class Server {
 
 		this.games.forEach(game => {
 			game.players.forEach(player => {
-				if (player.id == socket.id) {
+				if (player.id === socket.id) {
 					game.onOpponentLeft();
 					this.endGame(game);
 					console.log(`Game ${game.id} over, player: ${player.id} left`);
@@ -62,7 +62,7 @@ class Server {
 	}
 
 	onPlayerLeave(socket) {
-		this.waitingPlayers = this.waitingPlayers.filter(p => p.id != socket.id);
+		this.waitingPlayers = this.waitingPlayers.filter(p => p.id !== socket.id);
 	}
 
 	createGame() {
@@ -95,7 +95,6 @@ class Server {
 			this.updateGame(game);
 		}
 	}
-
 
 	addPlayerToGameRoom(playerId, gameId) {
 		this.io.sockets.connected[playerId].join(gameId);

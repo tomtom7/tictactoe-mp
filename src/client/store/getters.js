@@ -4,9 +4,9 @@ export default {
 	},
 	btnText(state) {
 		if (state.gameState === 'QUEUED') {
-			return 'cancelText'
+			return 'cancelText';
 		}
-		return 'playText'
+		return 'playText';
 	},
 	gameState(state) {
 		return state.gameState;
