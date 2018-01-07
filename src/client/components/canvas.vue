@@ -1,5 +1,5 @@
 <template>
-	<canvas id="game-canvas" class="center" v-bind:width="w" v-bind:height="h" @click="onClick"></canvas>
+	<canvas id="game-canvas" class="center" v-bind:width="w" v-bind:height="h" @click="playerInput(getCursorPosition($event))"></canvas>
 </template>
 
 <script>
@@ -24,12 +24,9 @@
 			}
 		},
 		methods: {
-			...mapActions({
-				playerInput: 'playerInput'
-			}),
-			onClick(e) {
-				this.playerInput(this.getCursorPosition(e));
-			},
+			...mapActions([
+				'playerInput'
+            ]),
 			getCursorPosition(e) {
 				const rect = this.$el.getBoundingClientRect();
 				const x = e.clientX - rect.left;
