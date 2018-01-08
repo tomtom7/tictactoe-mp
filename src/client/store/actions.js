@@ -11,7 +11,7 @@ export default {
 		}
 		return context.dispatch('playerJoin');
 	},
-	setConditionalGameState(context, payload) {
+	conditionalGameState(context, payload) {
 		if (payload.id === context.state.socketId) {
 			return context.commit('gameState', payload.samePlayerState);
 		}
