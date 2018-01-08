@@ -15,5 +15,5 @@ export default {
 	},
 	gameState(state, value) {
 		state.gameState = value;
-	}
-}
+	},
+};

@@ -1,13 +1,10 @@
 import { getRandomIndex, getCellIndex, getCoordinates } from './general';
-import { tileScale, shapes, lines, gameOverCodes } from './constants';
+import { tileScale, lines, gameOverCodes } from './constants';
 
-class Game {
-	constructor(id, player1, player2) {
+export default class Game {
+	constructor(id, players) {
 		this.id = id;
-		player1.shape = shapes.X;
-		player2.shape = shapes.O;
-
-		this.players = [player1, player2];
+		this.players = players;
 		this.grid = [[], [], []];
 		this.currentPlayer = this.chooseRandomPlayer();
 		console.log(`Game ${this.id} started`);
@@ -18,11 +15,11 @@ class Game {
 	}
 
 	nextTurn() {
-		[this.currentPlayer] = this.players.filter(p => p.id != this.currentPlayer.id);
+		[this.currentPlayer] = this.players.filter(p => p.id !== this.currentPlayer.id);
 	}
 
 	validateTurn(id, data) {
-		if (this.result || id != this.currentPlayer.id) {
+		if (this.result || id !== this.currentPlayer.id) {
 			return;
 		}
 
@@ -44,11 +41,11 @@ class Game {
 		this.checkGrid(lines.COL, x, y);
 		this.checkGrid(lines.ROW, x, y);
 
-		if (x == y) {
+		if (x === y) {
 			this.checkGrid(lines.DIAG);
 		}
 
-		if (x + y == 2) {
+		if (x + y === 2) {
 			this.checkGrid(lines.ADIAG);
 		}
 
@@ -60,7 +57,7 @@ class Game {
 			return;
 		}
 
-		if ([].concat(...this.grid).filter(n => true).length == 9) {
+		if ([].concat(...this.grid).filter(() => true).length === 9) {
 			this.setResult(gameOverCodes.TIE);
 		}
 	}
@@ -72,19 +69,17 @@ class Game {
 
 		for (let i = 0; i < 3; i += 1) {
 			const coordinates = getCoordinates(type, x, y, i);
-			const cellX = coordinates[0];
-			const cellY = coordinates[1];
 
-			if (!this.isValidCell(cellX, cellY)) {
+			if (!this.isValidCell(coordinates.x, coordinates.y)) {
 				break;
 			}
 
-			this.checkWinner(i, type, cellX, cellY);
+			this.checkWinner(i, type, coordinates.x, coordinates.y);
 		}
 	}
 
 	isValidCell(x, y) {
-		return this.grid[x] && this.grid[x][y] && this.grid[x][y].id == this.currentPlayer.id;
+		return this.grid[x] && this.grid[x][y] && this.grid[x][y].id === this.currentPlayer.id;
 	}
 
 	onOpponentLeft() {
@@ -104,11 +99,9 @@ class Game {
 	}
 
 	checkWinner(i, type, x, y) {
-		if (i == 2) {
+		if (i === 2) {
 			this.setWinner(x, y, type);
 			console.log(`Game ${this.id} over, winner: ${this.result.winner}`);
 		}
 	}
 }
-
-export default Game;

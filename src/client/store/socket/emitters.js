@@ -3,16 +3,16 @@ export default {
 		if (context.state.game.id) {
 			this._vm.$socket.emit('playerInput', {
 				coordinates,
-				gameId: context.state.game.id
+				gameId: context.state.game.id,
 			});
 		}
 	},
-	playerJoin({commit}) {
+	playerJoin({ commit }) {
 		this._vm.$socket.emit('playerJoin');
 		commit('gameState', 'QUEUED');
 	},
-	playerLeave({commit}) {
+	playerLeave({ commit }) {
 		this._vm.$socket.emit('playerLeave');
 		commit('gameState', 'UNQUEUED');
 	},
-}
+};

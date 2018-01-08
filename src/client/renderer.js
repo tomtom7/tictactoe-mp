@@ -3,7 +3,7 @@ export default class Renderer {
 		this.canvas = canvas;
 		this.ctx = this.canvas.getContext('2d');
 		this.tileScale = tileScale;
-		this.offset = this.tileScale /2;
+		this.offset = this.tileScale / 2;
 		this.padding = this.tileScale / 4;
 		this.radius = this.tileScale / 2.5;
 	}

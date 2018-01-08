@@ -12,8 +12,8 @@ Vue.use(VuexI18n.plugin, store, {
 	moduleName: 'i18n',
 	onTranslationNotFound(locale, key) {
 		console.warn(`i18n :: Key '${key}' not found for locale '${locale}'`);
-	}}
-);
+	},
+});
 
 Vue.i18n.add('en', Vue.i18n.add('en', localeEn));
 Vue.i18n.set('en');
@@ -23,6 +23,6 @@ new Vue({
 	store,
 	components: {
 		GameState,
-		CanvasComponent
-	}
+		CanvasComponent,
+	},
 });

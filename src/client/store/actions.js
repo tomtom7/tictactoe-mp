@@ -4,12 +4,12 @@ import emitters from './socket/emitters';
 export default {
 	playerAction(context) {
 		if (!context.state.connected) {
-			return;
+			return undefined;
 		}
 		if (context.state.gameState === 'QUEUED') {
 			return context.dispatch('playerLeave');
 		}
-		return context.dispatch("playerJoin");
+		return context.dispatch('playerJoin');
 	},
 	setConditionalGameState(context, payload) {
 		if (payload.id === context.state.socketId) {
@@ -18,5 +18,5 @@ export default {
 		return context.commit('gameState', payload.otherPlayerState);
 	},
 	...listeners,
-	...emitters
-}
+	...emitters,
+};

@@ -1,6 +1,7 @@
 import uuid from 'node-uuid';
 import Player from './player';
 import Game from './game';
+import { shapes } from './constants';
 
 export default class App {
 	constructor(io) {
@@ -49,9 +50,11 @@ export default class App {
 
 	createGame() {
 		const player1 = this.players.shift();
+		player1.shape = shapes.X;
 		const player2 = this.players.shift();
+		player2.shape = shapes.O;
 
-		const game = new Game(uuid.v4(), player1, player2);
+		const game = new Game(uuid.v4(), [player1, player2]);
 
 		if (this.io.sockets.connected[player1.id] && this.io.sockets.connected[player2.id]) {
 			this.startGame(game);

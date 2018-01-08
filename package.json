@@ -12,7 +12,13 @@
   "dependencies": {
     "express": "^4.16.2",
     "node-uuid": "^1.4.8",
-    "socket.io": "^2.0.4"
+    "socket.io": "^2.0.4",
+    "vue": "^2.5.13",
+    "vue-socket.io": "^2.1.1-a",
+    "css-loader": "^0.28.8",
+    "vue-template-compiler": "^2.5.13",
+    "vuex": "^3.0.1",
+    "vuex-i18n": "^1.9.0"
   },
   "devDependencies": {
     "babel-core": "^6.26.0",
@@ -20,14 +26,13 @@
     "babel-preset-stage-2": "^6.24.1",
     "babel-preset-stage-3": "^6.24.1",
     "babel-watch": "^2.0.7",
-    "css-loader": "^0.28.8",
+    "eslint": "^4.15.0",
+    "eslint-config-airbnb": "^16.1.0",
+    "eslint-plugin-import": "^2.8.0",
+    "eslint-plugin-jsx-a11y": "^6.0.3",
+    "eslint-plugin-react": "^7.5.1",
     "parcel-bundler": "^1.4.1",
-    "parcel-plugin-vue": "^1.5.0",
-    "vue": "^2.5.13",
-    "vue-socket.io": "^2.1.1-a",
-    "vue-template-compiler": "^2.5.13",
-    "vuex": "^3.0.1",
-    "vuex-i18n": "^1.9.0"
+    "parcel-plugin-vue": "^1.5.0"
   },
   "browser": {
     "vue": "vue/dist/vue.common.js"
