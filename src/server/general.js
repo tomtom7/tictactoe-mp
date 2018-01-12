@@ -1,14 +1,8 @@
 import { lines } from './constants';
 
-export function getRandomIndex(max) {
-	return Math.floor(Math.random() * max);
-}
-
-export function getCellIndex(value, divisible) {
-	return Math.floor(value / divisible);
-}
-
-export function getCoordinates(type, x, y, i) {
+export const getRandomIndex = max => Math.floor(Math.random() * max);
+export const getCellIndex = (value, divisible) => Math.floor(value / divisible);
+export const getCoordinates = (type, x, y, i) => {
 	if (type === lines.COL) {
 		return { x, y: i };
 	}
@@ -23,4 +17,4 @@ export function getCoordinates(type, x, y, i) {
 	}
 
 	return { x, y };
-}
+};

@@ -8,11 +8,11 @@ export default class Renderer {
 		this.radius = this.tileScale / 2.5;
 	}
 
-	clearCanvas() {
+	clearCanvas = () => {
 		this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
 	}
 
-	drawGrid() {
+	drawGrid = () => {
 		this.ctx.beginPath();
 		this.ctx.lineWidth = 0.15;
 		this.ctx.strokeStyle = '#000000';
@@ -31,7 +31,7 @@ export default class Renderer {
 		this.ctx.stroke();
 	}
 
-	drawEntitiy(shape, x, y) {
+	drawEntitiy = (shape, x, y) => {
 		this.ctx.beginPath();
 		this.ctx.lineWidth = 10;
 		if (shape === 'X') {
@@ -42,7 +42,7 @@ export default class Renderer {
 		this.ctx.stroke();
 	}
 
-	drawMoves(grid) {
+	drawMoves = grid => {
 		for (let x = 0; x < grid.length; x += 1) {
 			for (let y = 0; y < grid[x].length; y += 1) {
 				if (grid[x][y]) {
@@ -52,18 +52,18 @@ export default class Renderer {
 		}
 	}
 
-	drawX(x, y) {
+	drawX = (x, y) => {
 		this.ctx.moveTo(x + this.offset - this.radius, y + this.offset - this.radius);
 		this.ctx.lineTo(x + this.offset + this.radius, y + this.offset + this.radius);
 		this.ctx.moveTo(x + this.offset + this.radius, y + this.offset - this.radius);
 		this.ctx.lineTo(x + this.offset - this.radius, y + this.offset + this.radius);
 	}
 
-	drawO(x, y) {
+	drawO = (x, y) => {
 		this.ctx.arc(x + this.offset, y + this.offset, this.radius, 0, 2 * Math.PI);
 	}
 
-	drawVictoryLine(line) {
+	drawVictoryLine = line => {
 		this.ctx.beginPath();
 		this.ctx.lineWidth = 5;
 		if (line.type === 'COL') {
@@ -82,27 +82,27 @@ export default class Renderer {
 		this.ctx.stroke();
 	}
 
-	drawCol(x) {
+	drawCol = x => {
 		this.ctx.moveTo(x + this.offset, this.padding);
 		this.ctx.lineTo(x + this.offset, this.canvas.height - this.padding);
 	}
 
-	drawRow(y) {
+	drawRow = y => {
 		this.ctx.moveTo(this.padding, y + this.offset);
 		this.ctx.lineTo(this.canvas.width - this.padding, y + this.offset);
 	}
 
-	drawDiagonal() {
+	drawDiagonal = () => {
 		this.ctx.moveTo(this.padding, this.padding);
 		this.ctx.lineTo(this.canvas.width - this.padding, this.canvas.height - this.padding);
 	}
 
-	drawAntiDiagonal() {
+	drawAntiDiagonal = () => {
 		this.ctx.moveTo(this.canvas.width - this.padding, this.padding);
 		this.ctx.lineTo(this.padding, this.canvas.height - this.padding);
 	}
 
-	render(game) {
+	render = game => {
 		this.clearCanvas();
 		this.drawGrid();
 		this.drawMoves(game.grid);

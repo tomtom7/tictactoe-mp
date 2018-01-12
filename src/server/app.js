@@ -4,14 +4,15 @@ import Game from './game';
 import { shapes } from './constants';
 
 export default class App {
+	games = [];
+	players = [];
+
 	constructor(io) {
 		this.io = io;
 		this.addSocketHandlers();
-		this.games = [];
-		this.players = [];
 	}
 
-	addSocketHandlers() {
+	addSocketHandlers = () => {
 		this.io.sockets.on('connection', socket => {
 			socket.on('disconnect', () => this.onDisconnect(socket));
 			socket.on('playerJoin', () => this.onPlayerJoin(socket.id));
@@ -20,7 +21,7 @@ export default class App {
 		});
 	}
 
-	onDisconnect(socket) {
+	onDisconnect = socket => {
 		console.log(`Player left: ${socket.id}`);
 
 		this.games.forEach(game => {
@@ -35,7 +36,7 @@ export default class App {
 		this.players.filter(p => p.id !== socket.id);
 	}
 
-	onPlayerJoin(id) {
+	onPlayerJoin = id => {
 		console.log(`New player: ${id}`);
 		this.players.push(new Player(id));
 
@@ -44,11 +45,11 @@ export default class App {
 		}
 	}
 
-	onPlayerLeave(socket) {
+	onPlayerLeave = socket => {
 		this.players = this.players.filter(p => p.id !== socket.id);
 	}
 
-	createGame() {
+	createGame = () => {
 		const player1 = this.players.shift();
 		player1.shape = shapes.X;
 		const player2 = this.players.shift();
@@ -61,11 +62,9 @@ export default class App {
 		}
 	}
 
-	findGame(id, playerId) {
-		return this.games.find(game => game.id === id && game.players.some(player => player.id === playerId));
-	}
+	findGame = (id, playerId) => this.games.find(game => game.id === id && game.players.some(player => player.id === playerId));
 
-	onPlayerInput(socket, data) {
+	onPlayerInput = (socket, data) => {
 		const game = this.findGame(data.gameId, socket.id);
 
 		if (!game) {
@@ -81,11 +80,11 @@ export default class App {
 		}
 	}
 
-	addPlayerToGameRoom(playerId, gameId) {
+	addPlayerToGameRoom = (playerId, gameId) => {
 		this.io.sockets.connected[playerId].join(gameId);
 	}
 
-	removePlayersFromGameRoom(game) {
+	removePlayersFromGameRoom = game => {
 		game.players.forEach(player => {
 			if (this.io.sockets.connected[player.id]) {
 				this.io.sockets.connected[player.id].leave(game.id);
@@ -93,16 +92,16 @@ export default class App {
 		});
 	}
 
-	endGame(game) {
+	endGame = game => {
 		this.io.to(game.id).emit('gameOver', game);
 		this.removePlayersFromGameRoom(game);
 	}
 
-	updateGame(game) {
+	updateGame = game => {
 		this.io.to(game.id).emit('updateGame', game);
 	}
 
-	startGame(game) {
+	startGame= game => {
 		game.players.forEach(player => this.addPlayerToGameRoom(player.id, game.id));
 		this.games.push(game);
 		this.updateGame(game);
