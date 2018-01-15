@@ -6,17 +6,16 @@
 </template>
 
 <script>
-  import { mapGetters, mapActions } from 'vuex';
+	import { mapGetters, mapActions } from 'vuex';
 	export default {
 		name: 'game-state',
 		computed: mapGetters([
 			'isRunning',
-      'btnText',
-      'gameState'
-    ]),
-    methods: mapActions([
-      'playerAction'
-    ])
-  }
+			'btnText',
+			'gameState'
+		]),
+		methods: mapActions([
+			'playerAction'
+		])
+	}
 </script>
-

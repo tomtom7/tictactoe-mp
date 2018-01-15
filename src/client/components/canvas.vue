@@ -11,13 +11,13 @@
 			return {
 				w: '300',
 				h: '300',
-        renderer: {},
-        tileScale: 100
-      }
+				renderer: {},
+				tileScale: 100
+			}
 		},
 		mounted() {
 			this.renderer = new Renderer(this.$el, this.tileScale);
-    },
+		},
 		computed: {
 			game() {
 				return this.$store.getters.game;
@@ -26,7 +26,7 @@
 		methods: {
 			...mapActions([
 				'playerInput'
-      ]),
+			]),
 			getCursorPosition(e) {
 				const rect = this.$el.getBoundingClientRect();
 				const x = e.clientX - rect.left;
@@ -39,8 +39,7 @@
 				if (this.game) {
 					this.renderer.render(this.game);
 				}
-      }
+			}
 		}
 	}
 </script>
-
