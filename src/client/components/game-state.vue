@@ -9,11 +9,15 @@
 	import { mapGetters, mapActions } from 'vuex';
 	export default {
 		name: 'game-state',
-		computed: mapGetters([
-			'isRunning',
-			'btnText',
-			'gameState'
-		]),
+		computed: {
+			...mapGetters([
+				'isRunning',
+				'gameState'
+			]),
+			btnText() {
+				return this.gameState === 'QUEUED' ? 'cancelText' : 'playText';
+			}
+		},
 		methods: mapActions([
 			'playerAction'
 		])
