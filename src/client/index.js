@@ -11,7 +11,7 @@ Vue.use(VueSocketIO, 'http://localhost:3000', store);
 Vue.use(VuexI18n.plugin, store, {
 	moduleName: 'i18n',
 	onTranslationNotFound(locale, key) {
-		console.warn(`i18n :: Key '${key}' not found for locale '${locale}'`);
+		console.warn(`i18n :: Key ${key} not found for locale ${locale}`);
 	},
 });
 

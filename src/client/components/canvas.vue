@@ -26,7 +26,7 @@
 		methods: {
 			...mapActions([
 				'playerInput'
-            ]),
+      ]),
 			getCursorPosition(e) {
 				const rect = this.$el.getBoundingClientRect();
 				const x = e.clientX - rect.left;

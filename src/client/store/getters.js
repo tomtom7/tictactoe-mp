@@ -1,17 +1,6 @@
 export default {
-	isRunning(state) {
-		return state.game.id;
-	},
-	btnText(state) {
-		if (state.gameState === 'QUEUED') {
-			return 'cancelText';
-		}
-		return 'playText';
-	},
-	gameState(state) {
-		return state.gameState;
-	},
-	game(state) {
-		return state.game;
-	},
+	isRunning: state => state.game.id,
+	btnText: state => state.gameState === 'QUEUED' ? 'cancelText' : 'playText',
+	gameState: state => state.gameState,
+	game: state => state.game
 };
